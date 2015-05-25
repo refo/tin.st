@@ -2,7 +2,7 @@
 
 use Request;
 
-class HashController extends Controller {
+class SlugController extends Controller {
 
     public function redirect($hash)
     {
