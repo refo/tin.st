@@ -7,3 +7,5 @@ _files
 *.lock
 
 src/storage/database.sqlite
+
+src/composer.lock
