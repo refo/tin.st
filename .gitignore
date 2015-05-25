@@ -5,3 +5,5 @@
 _files
 
 *.lock
+
+src/storage/database.sqlite
