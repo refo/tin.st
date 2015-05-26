@@ -10,18 +10,20 @@ class SlugController extends Controller {
     // Hashids instance
     private $hashids;
 
-    // APP_KEY
+    // Application Key
     private $key;
 
 
     public function __construct()
     {
+        // Application Key
+        $this->key = env('APP_KEY');
+        
         // Hashids instance
-        $this->hashids = new Hashids($key, 4);
+        $this->hashids = new Hashids($this->key, 4);
 
         // TODO: use a simple security measure
         // 
-        $this->key = env('APP_KEY');
     }
 
     public function redirect($hash)
