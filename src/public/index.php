@@ -1,8 +1,8 @@
 <?php
 
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-//header("Access-Control-Expose-Headers: ");
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Username, Token, X-tb-token, X-tb-username");
+header("Access-Control-Expose-Headers: X-tb-token, X-tb-username");
 header("Access-Control-Allow-Methods: GET, POST, DELETE, PUT, PATCH");
 
 /**
