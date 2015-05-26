@@ -7,7 +7,11 @@ use Hashids\Hashids;
 
 class SlugController extends Controller {
 
+    // Hashids instance
     private $hashids;
+
+    // APP_KEY
+    private $key;
 
 
     public function __construct()
