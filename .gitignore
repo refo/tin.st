@@ -9,3 +9,5 @@ _files
 src/storage/database.sqlite
 
 src/composer.lock
+
+src/composer.lock
