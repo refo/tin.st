@@ -11,26 +11,37 @@ class SlugController extends Controller {
     private $hashids;
 
     // Application Key
-    private $key;
+    private $appKey;
 
 
     public function __construct()
     {
-        // Application Key
-        $this->key = env('APP_KEY');
+        // Set application key
+        $appKey = env('APP_KEY');
+
+        // All caps hashing alphabet
+        // following keys removed to prevent misreading:
+        // 1, I, 2, Z, O, 0, Q
+        $alphabet = 'ABCDEFGHJKLMNPRSTUVWXY3456789';
         
         // Hashids instance
-        $this->hashids = new Hashids($this->key, 4);
+        // Use APP_KEY enviroment variable as hashing salt
+        $this->hashids = new Hashids($appKey, 4, $alphabet);
+
+        //
+        // TODO: the instantiation above should be a service provider
 
         // TODO: use a simple security measure
-        // 
+        // i.e. require APP_KEY to be sent and matches with this app's key
+        // e.g. X-APP-KEY should be a good header name choice for the sake of simplicity
     }
+
 
     public function redirect($hash)
     {
         try {
             // Find the slug
-            $slug = Slug::where('hash', '=', $hash)->firstOrFail();
+            $slug = Slug::where(['hash' => $hash])->firstOrFail();
         } catch (Exception $e){
             // Return error if slug couldn't found
             return response('Not Found', 404);
@@ -41,28 +52,41 @@ class SlugController extends Controller {
         return redirect($slug->url);
     }
 
+
     public function create()
     {
         
         // TODO: Verify URL
+        $url        = Request::input('url');
+
+        $customHash = Request::input('hash', false);
+
+        // Fetch existing slug or create one
         // 
-        $url  = Request::input('url');
+        if (is_string($customHash)) {
+            $hash = strtoupper($customHash);
+            $slug = Slug::firstOrNew(['hash' => $hash]);
+            $slug->url = $url;
+        } else {
+            // Create a random unique id        
+            // TODO: Better way to create a unique id
+            // 
+            $numberToHash = (int)(Slug::count() . rand(10, 99));
+            $hash = $this->hashids->encode($numberToHash);
+            $slug = new Slug(['hash' => $hash, 'url' => $url]);
+        }
 
-        // TODO: Better way to create a unique id
-        // 
-        $hash = $this->hashids->encode(time());
-
-
-        // Create a new slug
-        $slug = new Slug([
-            'hash' => $hash,
-            'url'  => $url,
-        ]);
-
-        // save and return
         $slug->save();
-        return $slug;
+        
+        // Add created / modified short url to result
+        // TODO: domain (tin.st) shouldn't be hardcoded
+        // 
+        $arr = $slug->toArray();
+        $arr['shortUrl'] = sprintf('http://tin.st/%s', $slug->hash);
+
+        return $arr;
     }
+
 
     public function update($hash)
     {
