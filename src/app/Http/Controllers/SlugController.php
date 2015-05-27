@@ -87,10 +87,4 @@ class SlugController extends Controller {
         return $arr;
     }
 
-
-    public function update($hash)
-    {
-        return 'Hash to update: ' . $hash;
-    }
-
 }
