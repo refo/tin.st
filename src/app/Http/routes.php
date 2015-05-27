@@ -1,7 +1,7 @@
 <?php
 
 Route::get('/', function(){
-    return response()->view('welcome')->header('X-CSRF-TOKEN', csrf_token());
+    return redirect('http://tinkongroup.com/');
 });
 
 Route::post('/', 'SlugController@create');
