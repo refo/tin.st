@@ -49,6 +49,11 @@ class SlugController extends Controller {
             // Return error if slug couldn't found
             return response('Not Found', 404);
         }
+
+        if (Request::input('detail', false) !== false) {
+            return $slug;
+        }
+
         // Icrement slug visit count by 1
         $slug->increment('visit');
         // Redirect to target url
