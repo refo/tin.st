@@ -5,4 +5,5 @@ Route::get('/', function(){
 });
 
 Route::post('/', 'SlugController@create');
+Route::get('/list', 'SlugController@index');
 Route::get('/{hash}', 'SlugController@redirect');

@@ -39,6 +39,9 @@ class SlugController extends Controller {
 
     public function redirect($hash)
     {
+        // Case-insensitive URIS
+        $hash = strtoupper($hash);
+
         try {
             // Find the slug
             $slug = Slug::where(['hash' => $hash])->firstOrFail();
@@ -87,4 +90,8 @@ class SlugController extends Controller {
         return $arr;
     }
 
+    public function index()
+    {
+        return Slug::paginate(20);
+    }
 }
