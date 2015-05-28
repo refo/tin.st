@@ -97,6 +97,6 @@ class SlugController extends Controller {
 
     public function index()
     {
-        return Slug::paginate(20);
+        return Slug::orderBy('created_at', 'desc')->get();
     }
 }
